@@ -1,0 +1,6 @@
+
+PRIVATE_LAMBDA_SUBNET: subnet-456
+
+NAT_VPC_SECURITY_GROUP: sg-678
+
+IAM_EXECUTION_ROLE: arn:aws:iam::123456789012:role/lamda-role-name

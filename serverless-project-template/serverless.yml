@@ -1,0 +1,43 @@
+
+service: project-name # NOTE: update this with your service name
+
+provider:
+  name: aws
+  runtime: nodejs14.10
+  stage: ${opt:stage}
+  profile: projectname_${opt:stage}
+  role: ${self:custom.IAM_EXECUTION_ROLE}
+
+custom: ${file(./serverless/serverless.${self:provider.stage}.yml)}
+
+package:
+  exclude:
+    - node_modules/aws-sdk/**
+    - .git/**
+    - .vscode/**
+
+functions:
+  projectname:
+    handler: lambda.handler
+    name: ${opt:stage}-projectname
+    memorySize: 256
+    timeout: 300
+    environment:
+      NODE_ENV: ${opt:stage}
+    vpc:
+      securityGroupIds:
+        - ${self:custom.NAT_VPC_SECURITY_GROUP}
+      subnetIds:
+        - ${self:custom.API_WEBSITE_SUBNET}
+      
+    
+    events:
+    # Organization    
+      - http:
+          path: health
+          method: get
+          cors: true
+      - http:
+          path: hello
+          method: get
+          cors: true

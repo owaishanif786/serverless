@@ -1,0 +1,9 @@
+{"emmet.includeLanguages": {
+    "javascript": "node"
+  },
+  "emmet.triggerExpansionOnTab": true,
+  "[javascript]": {
+    "editor.formatOnSave": true
+},
+"eslint.enable": false
+  }

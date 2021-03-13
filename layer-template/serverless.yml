@@ -1,0 +1,35 @@
+
+service: lambda-layers 
+
+provider:
+  name: aws
+  runtime: nodejs14.x #supported runtime version
+  stage: dev #can use ${opt:stage}
+  profile: test_profile #profile in ~/.aws/credentials
+  role: arn:aws:iam::111111111111:role/abc-us-east-1-lambdaRole #can use variable
+
+package:
+  exclude:
+    - layers/**
+
+
+functions:
+  lambdalayertest:
+    handler: lambda.handler
+    name: dev-lambda-layer-test
+    memorySize: 256
+    timeout: 300
+    environment:
+      NODE_ENV: dev 
+    layers:
+      - arn:aws:lambda:us-east-1:111111111111:layer:dev-test-layer:1
+
+#lambda layers here
+layers:
+  modules:
+    path: layers
+    name: dev-test-layer
+    description: test layer of nodejs modules
+    compatibleRuntimes:
+        - nodejs14.x
+    retain: false
